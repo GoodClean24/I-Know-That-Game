@@ -291,3 +291,13 @@ Rapid Fire intentionally remains the timed exception:
 - Added `?v=2.3` cache-busting to styles.css, questions.js and app.js for GitHub Pages/browser caching.
 - firebase-config.js remains only as a reference/fallback file.
 - When the current build loads correctly, Host header should say FIREBASE ON rather than DEMO MODE.
+
+
+## v2.4 TV Sync + Header Fix
+- TV logo/header is now constrained to its own reserved row so it cannot overlap instruction or question content.
+- Firestore game state and TV heartbeat are separated.
+- Host writes game state under `gameState`; TV heartbeat writes only `displayLastSeenMs`.
+- TV listens specifically for game-state revisions, preventing heartbeat traffic from interfering with question-state rendering.
+- Each Host sync increments `syncRevision`.
+- Starting the game should now move the real TV from Instructions to Question 1 immediately.
+- Browser cache-busting updated to v2.4.

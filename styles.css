@@ -905,3 +905,46 @@ button:disabled{opacity:.35;cursor:not-allowed}
   .tv-main-grid{grid-template-columns:minmax(0,1fr) 320px}
   .tv-game-header .logo{width:220px}
 }
+
+
+/* v2.4 — TV header containment + live sync test */
+.tv-pad{
+  grid-template-rows:132px minmax(0,1fr) 72px;
+}
+.tv-game-header{
+  min-height:132px;
+  overflow:hidden;
+  align-items:center;
+}
+.tv-game-header .tv-header-center{
+  min-height:132px;
+  overflow:hidden;
+}
+.tv-game-header .stripes{
+  top:50%;
+  transform:translateY(-50%);
+}
+.tv-game-header .logo-wrap{
+  display:grid;
+  place-items:center;
+  height:126px;
+  overflow:hidden;
+}
+.tv-game-header .logo{
+  width:172px;
+  max-height:122px;
+  object-fit:contain;
+}
+.instructions-tv{
+  grid-template-rows:132px minmax(0,1fr);
+}
+.instructions-tv .tv-header{
+  height:132px;
+  overflow:hidden;
+}
+.instructions-body{
+  min-height:0;
+}
+@media (max-width:1200px){
+  .tv-game-header .logo{width:158px;max-height:112px}
+}
