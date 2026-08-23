@@ -1,0 +1,12 @@
+I KNOW THAT! v1.1 Functional Test — Bug Fix Validation
+
+PASS — show score toggle
+PASS — pause toggle
+PASS — toggle handler
+PASS — undo hint
+PASS — undo reveal
+PASS — host sorted
+PASS — tv sorted
+PASS — no BroadcastChannel
+PASS — no localStorage
+PASS — app.js JavaScript syntax (node --check)
