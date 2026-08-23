@@ -10,3 +10,5 @@ PASS — tv sorted
 PASS — no BroadcastChannel
 PASS — no localStorage
 PASS — app.js JavaScript syntax (node --check)
+
+V2.2: Firebase config embedded. Firestore must be enabled. Real cross-device test requires web hosting.

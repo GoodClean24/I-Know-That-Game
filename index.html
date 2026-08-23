@@ -4,17 +4,26 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>I KNOW THAT!</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=2.3">
 </head>
 <body>
   <div id="app"></div>
 
-  <!-- Firebase is optional for the first functional test.
-       Fill firebase-config.js to enable true Host ↔ TV syncing across devices. -->
+  <!-- Firebase configuration is embedded here so GitHub Pages cannot serve
+       an older cached blank firebase-config.js. -->
+  <script>
+    window.IKT_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyD7pEZH2NrJ0RcsRmB6r5tKDl-MQSVIdIs",
+      authDomain: "i-know-that-family-game.firebaseapp.com",
+      projectId: "i-know-that-family-game",
+      storageBucket: "i-know-that-family-game.firebasestorage.app",
+      messagingSenderId: "179460904094",
+      appId: "1:179460904094:web:32003660ee7717a75c978f"
+    };
+  </script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="firebase-config.js"></script>
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <script src="questions.js?v=2.3"></script>
+  <script src="app.js?v=2.3"></script>
 </body>
 </html>

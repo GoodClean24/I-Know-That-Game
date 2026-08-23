@@ -276,3 +276,18 @@ Rapid Fire intentionally remains the timed exception:
 - TV gameplay header restored to the approved centered logo with full-width retro stripes.
 - TV right-side scoreboard restyled to match the approved scoreboard look.
 - Host-side game logic from v2.0 remains intact.
+
+
+## v2.2 Firebase Connected
+- Firebase Web App configuration has been added for `i-know-that-family-game`.
+- Cloud Firestore is expected to be enabled in Firebase.
+- Host and TV now use the `iktSessions` Firestore collection for live session sync.
+- A real two-device test still requires the app to be served from a web URL; opening `index.html` with `file://` only works on that one computer.
+
+
+## v2.3 Firebase Live-Site Fix
+- Firebase config is embedded directly in index.html.
+- Removed runtime dependence on an external firebase-config.js file.
+- Added `?v=2.3` cache-busting to styles.css, questions.js and app.js for GitHub Pages/browser caching.
+- firebase-config.js remains only as a reference/fallback file.
+- When the current build loads correctly, Host header should say FIREBASE ON rather than DEMO MODE.
