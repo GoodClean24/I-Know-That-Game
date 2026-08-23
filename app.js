@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '2.5';
+  const BUILD = '2.6';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -218,35 +218,43 @@
     state.phase='instructions';
     await sync();
   }
+  let startingGame=false;
   async function startGame(){
+    if(startingGame) return;
+    startingGame=true;
+
+    lastSyncStatus='STARTING QUESTION 1…';
+    lastSyncError='';
+
     state.phase='question';
     history=[];
     state.updatedAtMs=Date.now();
     state.syncRevision=(state.syncRevision||0)+1;
 
-    // Render Question 1 on the Host immediately.
+    // If the click was received, the Host MUST leave Instructions immediately,
+    // before waiting for Firebase.
     renderHost();
 
     if(!cloud.enabled || !state.code){
       lastSyncStatus='SYNC ERROR';
       lastSyncError='Firebase/code unavailable.';
+      startingGame=false;
       renderHost();
       return;
     }
 
-    lastSyncStatus='SENDING QUESTION 1…';
-    renderHost();
     try{
       await cloud.save(state.code,state);
       lastSyncStatus='QUESTION 1 SENT';
       lastSyncError='';
-      renderHost();
     }catch(err){
       console.error('START GAME WRITE FAILED',err);
       lastSyncStatus='SYNC ERROR';
       lastSyncError=err.message || String(err);
-      renderHost();
       alert(`Firebase could not send Question 1: ${lastSyncError}`);
+    }finally{
+      startingGame=false;
+      renderHost();
     }
   }
   async function useHint(n){
@@ -847,7 +855,7 @@
     return `<div class="setup-wrap"><section class="instructions-host">
       <h1>INSTRUCTIONS ARE ON THE TV</h1>
       <div class="rule-grid">${rulesForMode().map((r,i)=>`<div class="rule"><div class="rule-num">${i+1}</div><div><b>${r[0]}</b><span>${r[1]}</span></div></div>`).join('')}</div>
-      <div class="center-actions"><button class="secondary" id="previewInstructions">TV PREVIEW</button><button class="primary" id="startGame">START GAME →</button></div>
+      <div class="center-actions"><button class="secondary" id="previewInstructions">TV PREVIEW</button><button class="primary" id="startGame" data-action="start-game">START GAME →</button></div>
     </section></div>`;
   }
 
@@ -1469,7 +1477,6 @@
     document.getElementById('openPreviewConnect')?.addEventListener('click',openTVPreview);
     document.getElementById('showInstructions')?.addEventListener('click',startInstructions);
     document.getElementById('previewInstructions')?.addEventListener('click',openTVPreview);
-    document.getElementById('startGame')?.addEventListener('click',startGame);
 
     document.getElementById('hint1')?.addEventListener('click',()=>useHint(1));
     document.getElementById('hint2')?.addEventListener('click',()=>useHint(2));
@@ -1943,6 +1950,21 @@
     const p=[...s.players].sort((a,b)=>b.score-a.score);
     const w=p[0]||{name:'WINNER',score:0};
     return `<div class="tv-takeover"><div class="stripes"><span class="s1"></span><span class="s2"></span><span class="s3"></span></div><div class="takeover-card"><img src="assets/compact_logo.png" class="logo"><div class="takeover-sub">AND THE WINNER IS…</div><div class="takeover-title">${esc(w.name)}</div><div class="takeover-sub">${w.score} POINT${w.score===1?'':'S'}</div><div class="takeover-note">${p.slice(1,3).map((x,i)=>`${i+2}. ${esc(x.name)} · ${x.score}`).join(' &nbsp; | &nbsp; ')}</div></div></div>`;
+  }
+
+  // Permanent Host action routing. The #app element itself is never replaced,
+  // so START GAME cannot lose its click handler during a Host re-render.
+  if(VIEW==='host'){
+    app.addEventListener('click',e=>{
+      const action=e.target.closest?.('[data-action]')?.dataset?.action;
+      if(action==='start-game'){
+        e.preventDefault();
+        e.stopPropagation();
+        lastSyncStatus='START BUTTON RECEIVED';
+        lastSyncError='';
+        startGame();
+      }
+    });
   }
 
   /* boot */

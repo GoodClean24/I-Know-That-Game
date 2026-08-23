@@ -312,3 +312,12 @@ Rapid Fire intentionally remains the timed exception:
 - Host displays BUILD 2.5 and live sync status.
 - TV displays BUILD 2.5 and its current phase.
 - If the Start Game Firestore write fails, the Host displays SYNC ERROR and an alert with the Firebase error.
+
+
+## v2.6 Start Game Button Fix
+- Replaced the per-render Start Game listener with permanent delegated click handling on the root app element.
+- Host redraws can no longer disconnect the Start Game button.
+- Pressing START GAME immediately changes the Host phase to Question before waiting for Firebase.
+- Firebase then writes Question 1 to `iktGameStates`.
+- Host status shows QUESTION 1 SENT when the write completes.
+- BUILD 2.6 remains visible on Host and TV for verification.
