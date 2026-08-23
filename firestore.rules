@@ -4,7 +4,12 @@ service cloud.firestore {
     // FAMILY TEST BUILD ONLY.
     // Game codes are random four-character session identifiers.
     // Harden before any public/large-scale deployment.
-    match /iktSessions/{gameCode} {
+
+    match /iktGameStates/{gameCode} {
+      allow read, create, update, delete: if true;
+    }
+
+    match /iktDisplays/{gameCode} {
       allow read, create, update, delete: if true;
     }
   }

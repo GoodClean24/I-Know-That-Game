@@ -330,3 +330,28 @@ Rapid Fire intentionally remains the timed exception:
 - Added a 5-second timeout so a stalled write reports SYNC ERROR instead of waiting forever.
 - Enabled Firestore automatic long-polling detection for more reliable Safari testing.
 - BUILD 2.7 remains visible on Host and TV.
+
+
+## v2.8 Server-Verified Firebase Sync
+
+Reviewed external Firebase recommendations incorporated:
+
+- `setPhase()` uses Firestore `update()` instead of merge-set.
+  - This fails explicitly if `iktGameStates/{code}` does not already exist.
+- After START GAME writes `phase: "question"`, the Host performs a server-only read:
+  - `get({source:'server'})`
+- The Host verifies Firebase itself persisted:
+  - `phase === "question"`
+- If the server reports another phase, the Host throws an explicit diagnostic error.
+- Host console logs the exact Firestore document targeted on START GAME.
+- TV console logs the exact Firestore document it subscribes to.
+- TV console logs every realtime snapshot phase it receives.
+- Repository `firestore.rules` now matches:
+  - `iktGameStates/{gameCode}`
+  - `iktDisplays/{gameCode}`
+- Visible build/cache version moved to 2.8.
+
+This diagnostic build distinguishes:
+1. wrong/nonexistent Firestore document,
+2. server write failure,
+3. server persisted the phase correctly but the TV listener did not receive it.
