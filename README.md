@@ -301,3 +301,14 @@ Rapid Fire intentionally remains the timed exception:
 - Each Host sync increments `syncRevision`.
 - Starting the game should now move the real TV from Instructions to Question 1 immediately.
 - Browser cache-busting updated to v2.4.
+
+
+## v2.5 Clean Sync Test
+- Uses a brand-new `iktGameStates` collection for game state.
+- Uses a separate `iktDisplays` collection for TV heartbeat.
+- No nested state and no revision filtering.
+- TV redraws on every Firestore game-state snapshot.
+- START GAME performs an explicit Firestore write for `phase: question`.
+- Host displays BUILD 2.5 and live sync status.
+- TV displays BUILD 2.5 and its current phase.
+- If the Start Game Firestore write fails, the Host displays SYNC ERROR and an alert with the Firebase error.

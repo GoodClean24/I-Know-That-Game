@@ -2,6 +2,7 @@
 (() => {
   'use strict';
 
+  const BUILD = '2.5';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -39,57 +40,49 @@
         }
       }
     }
-    doc(code){ return this.db.collection('iktSessions').doc(code); }
+
+    gameDoc(code){ return this.db.collection('iktGameStates').doc(code); }
+    displayDoc(code){ return this.db.collection('iktDisplays').doc(code); }
 
     async save(code,state){
-      if(!this.enabled) return;
+      if(!this.enabled) throw new Error('Firebase is not enabled.');
       const clean = deepClone(state);
-      const gameUpdatedAtMs = Date.now();
-      clean.updatedAtMs = gameUpdatedAtMs;
-      await this.doc(code).set({
-        gameState: clean,
-        gameUpdatedAtMs
-      },{merge:true});
+      clean.updatedAtMs = Date.now();
+      clean.build = BUILD;
+      await this.gameDoc(code).set(clean);
     }
 
     async load(code){
       if(!this.enabled) return null;
-      const snap = await this.doc(code).get();
-      if(!snap.exists) return null;
-      const data = snap.data();
-      return data.gameState || data;
+      const snap = await this.gameDoc(code).get();
+      return snap.exists ? snap.data() : null;
     }
 
     subscribeGame(code,cb){
       if(!this.enabled) return () => {};
-      let lastRevision = null;
-      return this.doc(code).onSnapshot(s => {
+      return this.gameDoc(code).onSnapshot(s => {
         if(!s.exists) return;
-        const root = s.data();
-        const game = root.gameState || root;
-        const revision = root.gameUpdatedAtMs || game.updatedAtMs || 0;
-        if(revision === lastRevision) return;
-        lastRevision = revision;
-        cb(game, root);
-      }, err => console.error('Game subscription failed', err));
+        cb(s.data());
+      }, err => {
+        console.error('Game subscription failed',err);
+        app.innerHTML=`<div class="tv-error"><div class="tv-error-card"><h1>TV SYNC ERROR</h1><p>${esc(err.message||err)}</p><p>BUILD ${BUILD}</p></div></div>`;
+      });
     }
 
     subscribeConnection(code,cb){
       if(!this.enabled) return () => {};
-      let lastSeen = null;
-      return this.doc(code).onSnapshot(s => {
+      return this.displayDoc(code).onSnapshot(s => {
         if(!s.exists) return;
-        const root = s.data();
-        const seen = root.displayLastSeenMs || 0;
-        if(seen === lastSeen) return;
-        lastSeen = seen;
-        cb(seen, root);
-      }, err => console.error('Connection subscription failed', err));
+        cb(s.data().displayLastSeenMs || 0);
+      }, err => console.error('Connection subscription failed',err));
     }
 
     async displayHeartbeat(code){
       if(!this.enabled) return;
-      await this.doc(code).set({displayLastSeenMs:Date.now()},{merge:true});
+      await this.displayDoc(code).set({
+        displayLastSeenMs:Date.now(),
+        build:BUILD
+      });
     }
   }
 
@@ -126,6 +119,8 @@
   let tvPreviewOpen = false;
   let connectWatcher = null;
   let rapidTimerHandle = null;
+  let lastSyncStatus = cloud.enabled ? 'READY' : 'FIREBASE OFF';
+  let lastSyncError = '';
 
   function questionBank(mode){
     return mode === 'showdown' ? Q.showdown : Q[mode];
@@ -153,9 +148,20 @@
     state.syncRevision = (state.syncRevision||0) + 1;
     renderHost();
     if(tvPreviewOpen) renderTVPreview();
+
     if(cloud.enabled && state.code){
-      try{ await cloud.save(state.code,state); }
-      catch(err){ console.error('Cloud save failed',err); }
+      lastSyncStatus='SENDING…';
+      renderHost();
+      try{
+        await cloud.save(state.code,state);
+        lastSyncStatus=`SYNCED · ${String(state.phase||'').toUpperCase()}`;
+        lastSyncError='';
+      }catch(err){
+        console.error('Cloud save failed',err);
+        lastSyncStatus='SYNC ERROR';
+        lastSyncError=err.message || String(err);
+      }
+      renderHost();
     }
   }
   function snapshotForUndo(){
@@ -214,10 +220,34 @@
   }
   async function startGame(){
     state.phase='question';
-    // Start gameplay with a clean undo stack. Undo should reverse game actions,
-    // not send the host back into setup/instructions.
     history=[];
-    await sync();
+    state.updatedAtMs=Date.now();
+    state.syncRevision=(state.syncRevision||0)+1;
+
+    // Render Question 1 on the Host immediately.
+    renderHost();
+
+    if(!cloud.enabled || !state.code){
+      lastSyncStatus='SYNC ERROR';
+      lastSyncError='Firebase/code unavailable.';
+      renderHost();
+      return;
+    }
+
+    lastSyncStatus='SENDING QUESTION 1…';
+    renderHost();
+    try{
+      await cloud.save(state.code,state);
+      lastSyncStatus='QUESTION 1 SENT';
+      lastSyncError='';
+      renderHost();
+    }catch(err){
+      console.error('START GAME WRITE FAILED',err);
+      lastSyncStatus='SYNC ERROR';
+      lastSyncError=err.message || String(err);
+      renderHost();
+      alert(`Firebase could not send Question 1: ${lastSyncError}`);
+    }
   }
   async function useHint(n){
     if(state.hintsUsed.includes(n)) return;
@@ -694,7 +724,7 @@
   function headerHtml(){
     const mode=MODES[state.mode]?.label || 'I KNOW THAT!';
     const cloudClass=cloud.enabled?'on':'demo';
-    const cloudText=cloud.enabled?'FIREBASE ON':'DEMO MODE';
+    const cloudText=cloud.enabled?'FIREBASE ON':'FIREBASE OFF';
     const tvOn = state.displayLastSeenMs && (Date.now()-state.displayLastSeenMs)<25000;
     return `<header class="host-header">
       <div class="left-actions">
@@ -703,11 +733,12 @@
       </div>
       <div class="brand">
         <img src="assets/compact_logo.png" class="logo" alt="I KNOW THAT!">
-        <div class="brandtext"><div class="tiny">HOST CONTROLS</div><div class="mode">${esc(mode)}</div></div>
+        <div class="brandtext"><div class="tiny">HOST CONTROLS · BUILD ${BUILD}</div><div class="mode">${esc(mode)}</div></div>
       </div>
       <div class="right-status">
+        <div class="sync-pill ${lastSyncStatus==='SYNC ERROR'?'bad':'good'}" title="${esc(lastSyncError)}">${esc(lastSyncStatus)}</div>
         <div class="cloud-pill ${cloudClass}">${cloudText}</div>
-        <div class="tv-pill ${tvOn?'on':''}">${tvOn?'TV CONNECTED':cloud.enabled?'TV WAITING':'BUILT-IN PREVIEW'}</div>
+        <div class="tv-pill ${tvOn?'on':''}">${tvOn?'TV CONNECTED':cloud.enabled?'TV WAITING':'NO TV'}</div>
       </div>
     </header>`;
   }
@@ -1550,7 +1581,7 @@
     });
     const beat=()=>cloud.displayHeartbeat(REQUESTED_CODE).catch(console.error);
     beat(); setInterval(beat,10000);
-    app.innerHTML=`<div class="tv-takeover"><div class="takeover-card"><img src="assets/compact_logo.png" class="logo" style="margin:0 auto"><div class="takeover-title">JOINING GAME…</div><div class="takeover-note">${REQUESTED_CODE}</div></div></div>`;
+    app.innerHTML=`<div class="tv-takeover"><div class="takeover-card"><img src="assets/compact_logo.png" class="logo" style="margin:0 auto"><div class="takeover-title">JOINING GAME…</div><div class="takeover-note">${REQUESTED_CODE} · BUILD ${BUILD}</div></div></div>`;
   }
 
   function tvReactionOverlay(s){
@@ -1576,7 +1607,7 @@
     else if(s.phase==='final') content=finalTVHtml(s);
     else content=connectedTVHtml(s);
 
-    return `<div class="tv-root">${content}${tvReactionOverlay(s)}</div>`;
+    return `<div class="tv-root">${content}${tvReactionOverlay(s)}<div class="tv-build-badge">BUILD ${BUILD} · ${esc(String(s.phase||'').toUpperCase())}</div></div>`;
   }
 
   

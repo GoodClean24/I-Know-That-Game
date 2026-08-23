@@ -948,3 +948,11 @@ button:disabled{opacity:.35;cursor:not-allowed}
 @media (max-width:1200px){
   .tv-game-header .logo{width:158px;max-height:112px}
 }
+
+
+/* v2.5 clean sync diagnostics */
+.host-header{grid-template-columns:170px 1fr 390px}
+.host-header .right-status{gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sync-pill{border:1px solid #3f7253;border-radius:999px;padding:6px 9px;font-size:9px;font-weight:1000;color:#bde9c9;background:#092116}
+.sync-pill.bad{border-color:#a55248;color:#ffd0c9;background:#2d0e0b}
+.tv-build-badge{position:absolute;right:12px;bottom:8px;z-index:90;border:1px solid rgba(215,162,78,.55);border-radius:999px;background:rgba(2,8,13,.78);color:#d7c89f;padding:5px 9px;font-size:9px;font-weight:1000;letter-spacing:.06em;pointer-events:none}
