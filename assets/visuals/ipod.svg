@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="iPod-style music player">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="280" y="65" width="240" height="390" rx="28" fill="#f3ead7" stroke="#14232c" stroke-width="12"/>
+  <rect x="315" y="100" width="170" height="150" rx="10" fill="#b9d7b7" stroke="#14232c" stroke-width="8"/>
+  <circle cx="400" cy="350" r="95" fill="#d9c9a9" stroke="#14232c" stroke-width="10"/>
+  <circle cx="400" cy="350" r="34" fill="#f3ead7" stroke="#14232c" stroke-width="8"/>
+  <text x="400" y="290" text-anchor="middle" font-size="28" font-family="Arial" font-weight="700" fill="#e76737">MENU</text>
+
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Portable cassette player">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="245" y="70" width="310" height="390" rx="34" fill="#14232c"/>
+  <rect x="285" y="120" width="230" height="210" rx="16" fill="#d9c9a9"/>
+  <circle cx="350" cy="225" r="46" fill="#f3ead7" stroke="#e76737" stroke-width="10"/>
+  <circle cx="450" cy="225" r="46" fill="#f3ead7" stroke="#2d9a9c" stroke-width="10"/>
+  <rect x="300" y="360" width="200" height="30" rx="10" fill="#e76737"/>
+  <path d="M555 110 C670 125 690 230 635 310" fill="none" stroke="#14232c" stroke-width="18"/>
+  <circle cx="630" cy="335" r="42" fill="#2d9a9c" stroke="#14232c" stroke-width="12"/>
+
+</svg>

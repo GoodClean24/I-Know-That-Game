@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Floppy disk">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <path d="M205 75 H555 L625 145 V445 H175 V105 Q175 75 205 75 Z" fill="#14232c"/>
+  <rect x="275" y="75" width="230" height="155" fill="#d9c9a9"/>
+  <rect x="335" y="90" width="110" height="120" fill="#2d9a9c"/>
+  <rect x="245" y="295" width="310" height="150" rx="18" fill="#f3ead7"/>
+  <rect x="300" y="330" width="200" height="30" fill="#e76737"/>
+
+</svg>

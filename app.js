@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '2.9';
+  const BUILD = '3.0';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -11,13 +11,24 @@
   const app = document.getElementById('app');
 
   const MODES = {
-    nextgen:{label:'NEXT GEN', total:10},
-    oldschool:{label:'OLD SCHOOL', total:10},
+    nextgen:{label:'NEXT GEN', total:30},
+    oldschool:{label:'OLD SCHOOL', total:30},
     showdown:{label:'FAMILY SHOWDOWN', total:20}
   };
 
   const deepClone = obj => JSON.parse(JSON.stringify(obj));
   const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  const visualAssetHtml = (item, extraClass='') => {
+    if(item?.visualSrc){
+      const portrait = item.category==='WHO AM I?' ? ' portrait' : '';
+      return `<div class="visual-image-frame ${esc(extraClass)}${portrait}">
+        <img src="${esc(item.visualSrc)}" alt="Trivia visual" referrerpolicy="no-referrer"
+          onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="visual-fallback" style="display:none">${esc(item.visual||'?')}</div>
+      </div>`;
+    }
+    return `<div class="visual-text-fallback ${esc(extraClass)}">${esc(item?.visual||item?.icon||'?')}</div>`;
+  };
   const uid = () => Math.random().toString(36).slice(2,9);
   const code4 = () => {
     const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -225,7 +236,17 @@
 
   function prepareGame(){
     const bank=questionBank(state.mode);
-    state.questionOrder = state.mode==='showdown' ? bank.map(x=>x.id) : shuffledIds(bank);
+    if(state.mode==='showdown'){
+      // Draw 5 random questions from each point tier so every Showdown is 20
+      // questions while preserving the locked 1/2/3/4-point progression.
+      state.questionOrder=[1,2,3,4].flatMap(points =>
+        shuffledIds(bank.filter(q=>q.points===points)).slice(0,5)
+      );
+    }else{
+      // The production banks are intentionally much larger than one game.
+      // Each individual game draws 30 unique questions at random.
+      state.questionOrder=shuffledIds(bank).slice(0,MODES[state.mode].total);
+    }
     state.questionIndex=0;
     loadCurrentQuestion();
   }
@@ -568,7 +589,8 @@
         hintsUsed:[]
       };
     }else{
-      const bank=visualSpecialBank(type);
+      const fullBank=visualSpecialBank(type);
+      const bank=fullBank.sort(()=>Math.random()-.5).slice(0,5);
       state.special={
         type:'visual',
         kind:type,
@@ -1151,7 +1173,7 @@
             <div class="rapid-intro-big">ROUND COMPLETE</div>
             <div class="qtext">${s.correct} POINT${s.correct===1?'':'S'} EARNED</div>
           `:`
-            <div class="rapid-host-logo">${esc(item?.visual||'?')}</div>
+            <div class="rapid-host-logo">${visualAssetHtml(item,'rapid')}</div>
             <div class="host-private rapid-answer-private">
               <div class="host-answer">
                 <div class="private-label">ANSWER · HOST ONLY</div>
@@ -1384,7 +1406,7 @@
         </div>
 
         <div class="qcard">
-          <div class="special-visual-inline">${esc(q.visual||s.icon||'?')}</div>
+          <div class="special-visual-inline">${visualAssetHtml(q,'special')}</div>
           <div class="qtext">${esc(q.question)}</div>
 
           <div class="host-private">
@@ -1884,7 +1906,7 @@
               <div class="tv-points">1 POINT EACH</div>
             </div>
             <div class="tv-qbody">
-              <div class="rapid-logo-card">${esc(item?.visual||'?')}</div>
+              <div class="rapid-logo-card">${visualAssetHtml(item,'rapid-tv')}</div>
             </div>
           </section>
           ${rapidTVScorePanel(s,sp)}
@@ -1956,7 +1978,7 @@
           </div>
 
           <div class="tv-qbody">
-            <div class="tv-special-visual">${esc(q.visual||sp.icon||'?')}</div>
+            <div class="tv-special-visual">${visualAssetHtml(q,'special-tv')}</div>
             <div class="tv-question">${esc(q.question)}</div>
 
             ${sp.hintsUsed?.includes(1)?`<div class="tv-hint"><div class="label">HINT 1</div><div class="copy">${esc(q.hint1)}</div></div>`:''}

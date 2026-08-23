@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Instant camera">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="170" y="115" width="460" height="300" rx="34" fill="#f3ead7" stroke="#14232c" stroke-width="12"/>
+  <rect x="220" y="155" width="360" height="55" rx="12" fill="#e76737"/>
+  <circle cx="400" cy="290" r="95" fill="#2d9a9c" stroke="#14232c" stroke-width="14"/>
+  <circle cx="400" cy="290" r="48" fill="#14232c"/>
+  <rect x="250" y="415" width="300" height="70" fill="#f3ead7" stroke="#14232c" stroke-width="10"/>
+
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="TV rabbit-ear antennas">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="190" y="210" width="420" height="245" rx="34" fill="#14232c"/>
+  <rect x="235" y="250" width="330" height="155" rx="18" fill="#2d9a9c"/>
+  <line x1="330" y1="210" x2="235" y2="45" stroke="#14232c" stroke-width="14"/>
+  <line x1="470" y1="210" x2="565" y2="45" stroke="#14232c" stroke-width="14"/>
+  <circle cx="235" cy="45" r="14" fill="#e76737"/><circle cx="565" cy="45" r="14" fill="#e76737"/>
+
+</svg>

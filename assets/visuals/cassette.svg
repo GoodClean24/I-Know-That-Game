@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Cassette tape">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="145" y="120" width="510" height="280" rx="28" fill="#14232c"/>
+  <rect x="190" y="160" width="420" height="110" rx="12" fill="#d9c9a9"/>
+  <circle cx="295" cy="215" r="48" fill="#f3ead7" stroke="#e76737" stroke-width="12"/>
+  <circle cx="505" cy="215" r="48" fill="#f3ead7" stroke="#2d9a9c" stroke-width="12"/>
+  <circle cx="295" cy="215" r="14" fill="#14232c"/><circle cx="505" cy="215" r="14" fill="#14232c"/>
+  <path d="M250 320 L550 320 L600 380 L200 380 Z" fill="#d9c9a9"/>
+  <circle cx="285" cy="350" r="16" fill="#14232c"/><circle cx="515" cy="350" r="16" fill="#14232c"/>
+
+</svg>

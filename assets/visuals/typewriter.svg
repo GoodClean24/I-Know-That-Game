@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Typewriter">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="170" y="230" width="460" height="210" rx="24" fill="#14232c"/>
+  <rect x="245" y="80" width="310" height="190" rx="10" fill="#d9c9a9" stroke="#14232c" stroke-width="12"/>
+  <line x1="290" y1="130" x2="510" y2="130" stroke="#e76737" stroke-width="10"/>
+  <line x1="290" y1="175" x2="500" y2="175" stroke="#2d9a9c" stroke-width="10"/>
+  <g fill="#f3ead7">
+    <circle cx="235" cy="300" r="18"/><circle cx="290" cy="300" r="18"/><circle cx="345" cy="300" r="18"/><circle cx="400" cy="300" r="18"/><circle cx="455" cy="300" r="18"/><circle cx="510" cy="300" r="18"/><circle cx="565" cy="300" r="18"/>
+    <circle cx="260" cy="350" r="18"/><circle cx="315" cy="350" r="18"/><circle cx="370" cy="350" r="18"/><circle cx="425" cy="350" r="18"/><circle cx="480" cy="350" r="18"/><circle cx="535" cy="350" r="18"/>
+  </g>
+
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="Boombox">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="120" y="150" width="560" height="270" rx="28" fill="#14232c"/>
+  <rect x="230" y="205" width="340" height="80" rx="10" fill="#d9c9a9"/>
+  <circle cx="230" cy="340" r="72" fill="#2d9a9c" stroke="#f3ead7" stroke-width="12"/>
+  <circle cx="570" cy="340" r="72" fill="#e76737" stroke="#f3ead7" stroke-width="12"/>
+  <rect x="330" y="315" width="140" height="65" rx="8" fill="#d9c9a9"/>
+  <path d="M250 150 Q400 40 550 150" fill="none" stroke="#14232c" stroke-width="22"/>
+
+</svg>

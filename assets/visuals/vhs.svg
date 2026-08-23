@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 520" role="img" aria-label="VHS tape">
+  <rect width="800" height="520" rx="36" fill="#f3ead7"/>
+  <rect x="18" y="18" width="764" height="484" rx="28" fill="none" stroke="#14232c" stroke-width="10"/>
+  
+  <rect x="105" y="115" width="590" height="300" rx="18" fill="#14232c"/>
+  <rect x="180" y="180" width="440" height="125" rx="10" fill="#d9c9a9"/>
+  <circle cx="285" cy="242" r="50" fill="#f3ead7" stroke="#e76737" stroke-width="12"/>
+  <circle cx="515" cy="242" r="50" fill="#f3ead7" stroke="#2d9a9c" stroke-width="12"/>
+  <rect x="230" y="335" width="340" height="38" rx="8" fill="#e76737"/>
+
+</svg>
