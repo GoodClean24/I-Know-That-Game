@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '2.6';
+  const BUILD = '2.7';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -34,6 +34,15 @@
         try{
           if(!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
           this.db = firebase.firestore();
+          // More reliable for Safari / AirPlay testing environments.
+          try{
+            this.db.settings({
+              experimentalAutoDetectLongPolling:true,
+              useFetchStreams:false
+            });
+          }catch(settingsErr){
+            console.warn('Firestore transport settings already applied', settingsErr);
+          }
         }catch(err){
           console.error(err);
           this.enabled = false;
@@ -50,6 +59,15 @@
       clean.updatedAtMs = Date.now();
       clean.build = BUILD;
       await this.gameDoc(code).set(clean);
+    }
+
+    async setPhase(code,phase){
+      if(!this.enabled) throw new Error('Firebase is not enabled.');
+      await this.gameDoc(code).set({
+        phase,
+        updatedAtMs:Date.now(),
+        build:BUILD
+      },{merge:true});
     }
 
     async load(code){
@@ -226,13 +244,12 @@
     lastSyncStatus='STARTING QUESTION 1…';
     lastSyncError='';
 
+    // Question 1 and all player data were already written when Instructions loaded.
+    // Locally switch the Host immediately.
     state.phase='question';
     history=[];
     state.updatedAtMs=Date.now();
     state.syncRevision=(state.syncRevision||0)+1;
-
-    // If the click was received, the Host MUST leave Instructions immediately,
-    // before waiting for Firebase.
     renderHost();
 
     if(!cloud.enabled || !state.code){
@@ -244,14 +261,20 @@
     }
 
     try{
-      await cloud.save(state.code,state);
+      const phaseWrite = cloud.setPhase(state.code,'question');
+      const timeout = new Promise((_,reject)=>{
+        setTimeout(()=>reject(new Error('Firebase did not confirm the Question 1 phase change within 5 seconds.')),5000);
+      });
+
+      await Promise.race([phaseWrite,timeout]);
+
       lastSyncStatus='QUESTION 1 SENT';
       lastSyncError='';
     }catch(err){
-      console.error('START GAME WRITE FAILED',err);
+      console.error('QUESTION PHASE WRITE FAILED',err);
       lastSyncStatus='SYNC ERROR';
       lastSyncError=err.message || String(err);
-      alert(`Firebase could not send Question 1: ${lastSyncError}`);
+      alert(`TV sync problem: ${lastSyncError}`);
     }finally{
       startingGame=false;
       renderHost();
@@ -1584,6 +1607,7 @@
     }
     cloud.subscribeGame(REQUESTED_CODE,(gameState)=>{
       tvState=gameState;
+      tvState.tvReceivedAtMs=Date.now();
       app.innerHTML=tvHtml(tvState,false);
     });
     const beat=()=>cloud.displayHeartbeat(REQUESTED_CODE).catch(console.error);

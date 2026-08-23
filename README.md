@@ -321,3 +321,12 @@ Rapid Fire intentionally remains the timed exception:
 - Firebase then writes Question 1 to `iktGameStates`.
 - Host status shows QUESTION 1 SENT when the write completes.
 - BUILD 2.6 remains visible on Host and TV for verification.
+
+
+## v2.7 Phase Sync Fix
+- START GAME no longer resends the full game state.
+- Question 1/player data is already in Firestore from the Instructions sync.
+- START GAME sends only `phase: question` as a tiny merged Firestore update.
+- Added a 5-second timeout so a stalled write reports SYNC ERROR instead of waiting forever.
+- Enabled Firestore automatic long-polling detection for more reliable Safari testing.
+- BUILD 2.7 remains visible on Host and TV.
