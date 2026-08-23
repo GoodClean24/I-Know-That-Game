@@ -355,3 +355,17 @@ This diagnostic build distinguishes:
 1. wrong/nonexistent Firestore document,
 2. server write failure,
 3. server persisted the phase correctly but the TV listener did not receive it.
+
+
+## v2.9 Clean Host Bindings
+
+- Incorporated the dead-binding cleanup from the externally reviewed `app.js`.
+- Removed duplicate `undoBtn` binding near the bottom of `bindHost()`.
+- Removed stale references to deleted functions:
+  - `toggleScoreboard`
+  - `togglePause`
+- The active Show Score / Pause bindings continue to use:
+  - `toggleTvOverride('scoreboard')`
+  - `toggleTvOverride('pause')`
+- Retains the v2.8 server-verified Firebase diagnostics.
+- Visible/cache build bumped to 2.9.

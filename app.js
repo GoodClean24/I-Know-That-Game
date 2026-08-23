@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '2.8';
+  const BUILD = '2.9';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -1556,9 +1556,6 @@
     document.getElementById('visualPassTeam')?.addEventListener('click',visualPassTeam);
     document.getElementById('nextVisualSpecial')?.addEventListener('click',nextVisualSpecialQuestion);
     document.getElementById('restartSpecialRound')?.addEventListener('click',()=>startSpecial(state.special.kind));
-    document.getElementById('undoBtn')?.addEventListener('click',undo);
-    document.getElementById('showScore')?.addEventListener('click',toggleScoreboard);
-    document.getElementById('pauseTv')?.addEventListener('click',togglePause);
     document.getElementById('exitSpecial')?.addEventListener('click',exitSpecial);
 
     document.getElementById('newGame')?.addEventListener('click',()=>{state=initialState();history=[];renderHost();});
