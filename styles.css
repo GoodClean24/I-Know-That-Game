@@ -1021,3 +1021,63 @@ button:disabled{opacity:.35;cursor:not-allowed}
   height:290px;
   max-width:520px;
 }
+
+
+/* v3.1 — visual round spacing fix
+   Keeps artwork fully visible and gives question copy its own row. */
+.special-visual-inline{
+  min-width:0;
+  min-height:0;
+  padding:4px 8px;
+  border:none;
+  background:transparent;
+}
+.special-visual-inline .visual-image-frame{
+  width:min(440px,88%);
+  height:155px;
+  margin:0 auto 6px;
+}
+.special-visual-inline .visual-image-frame.portrait{
+  width:min(300px,76%);
+  height:175px;
+}
+.special-visual-inline + .qtext{
+  font-size:clamp(20px,2.2vw,31px);
+  line-height:1.08;
+  padding:2px 8px 6px;
+}
+
+.tv-special-visual{
+  min-width:0;
+  min-height:0;
+  padding:4px 8px;
+  border:none;
+  background:transparent;
+}
+.tv-special-visual .visual-image-frame,
+.tv-special-visual .visual-image-frame.portrait{
+  width:min(430px,86%);
+  height:205px;
+  margin:0 auto 4px;
+}
+.tv-special-visual .visual-image-frame img{
+  max-width:100%;
+  max-height:100%;
+}
+.tv-special-visual + .tv-question{
+  font-size:clamp(28px,3vw,46px);
+  line-height:1.05;
+  padding:2px 12px 6px;
+}
+
+/* Keep image, question, hints and answer stacked — never layered. */
+.tv-qbody{
+  grid-auto-flow:row;
+}
+.tv-special-visual,
+.tv-special-visual + .tv-question,
+.tv-special-visual ~ .tv-hint,
+.tv-special-visual ~ .tv-answer{
+  position:relative;
+  z-index:1;
+}

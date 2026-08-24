@@ -397,3 +397,11 @@ content-selection and visual-display layer.
 - Family Showdown: 20 questions total; 5 randomly selected from each point tier.
 - Regular specials: 5 randomly selected questions per mini-round.
 - Rapid Fire: shuffled logo pool, one logo at a time.
+
+## v3.1 Visual Spacing Fix
+
+- Visual-only update.
+- Reduced special-round image height slightly on Host and TV.
+- Reduced special-round question font size only where an image is present.
+- Image and question are forced into separate stacked rows.
+- No Firebase, scoring, question-bank, or gameplay logic changes.

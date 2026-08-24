@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '3.0';
+  const BUILD = '3.1';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
