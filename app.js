@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '3.2';
+  const BUILD = '3.1';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -798,7 +798,7 @@
         ${state.phase!=='home'&&state.mode?`<button class="secondary" id="tvPreviewBtn">TV PREVIEW</button>`:''}
       </div>
       <div class="brand">
-        <img src="assets/hero_full.png" class="hero-art" alt="I KNOW THAT! full logo">
+        <img src="assets/compact_logo.png" class="logo" alt="I KNOW THAT!">
         <div class="brandtext"><div class="tiny">HOST CONTROLS · BUILD ${BUILD}</div><div class="mode">${esc(mode)}</div></div>
       </div>
       <div class="right-status">
@@ -831,7 +831,7 @@
   function homeHtml(){
     return `<div class="home-wrap"><section class="home-card">
       <div class="home-hero">
-        <img src="assets/hero_full.png" class="hero-art" alt="I KNOW THAT! full logo">
+        <img src="assets/compact_logo.png" class="logo" alt="">
         <h1>THE FAMILY GAME OF THEN, NOW & EVERYTHING IN BETWEEN</h1>
         <p>Choose a game. The full flow is now wired for testing.</p>
       </div>

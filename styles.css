@@ -1081,29 +1081,3 @@ button:disabled{opacity:.35;cursor:not-allowed}
   position:relative;
   z-index:1;
 }
-
-
-/* v3.2 — restore approved full hero image on Home / TV connect screens */
-.home-hero .hero-art{
-  display:block;
-  width:min(980px,92%);
-  margin:0 auto 10px;
-}
-.tv-home-hero{
-  min-height:420px;
-}
-.tv-home-hero .stripes{
-  display:none;
-}
-.tv-home-hero .hero-art{
-  position:relative;
-  z-index:2;
-  display:block;
-  width:min(1180px,95%);
-  margin:0 auto;
-}
-@media (max-width: 1200px){
-  .home-hero .hero-art{width:min(920px,94%)}
-  .tv-home-hero{min-height:350px}
-  .tv-home-hero .hero-art{width:min(960px,94%)}
-}
