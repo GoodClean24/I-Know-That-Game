@@ -2,7 +2,7 @@
 (() => {
   'use strict';
 
-  const BUILD = '3.1';
+  const BUILD = '3.1.1';
   const Q = window.IKT_QUESTIONS;
   const FIREBASE_CONFIG = window.IKT_FIREBASE_CONFIG || {};
   const params = new URLSearchParams(location.search);
@@ -606,8 +606,41 @@
         hintsUsed:[]
       };
     }
+    // Entering a Special must always take control of the live TV.
+    // A leftover Show Score / Pause override would otherwise mask the
+    // special even though the Host successfully entered it.
+    state.tvOverride='';
+    state.resultOverlay=null;
     state.phase='special';
+
     await sync();
+
+    // Verify the real server document, not just local Host state.
+    if(cloud.enabled && state.code){
+      try{
+        const snap = await cloud.gameDoc(state.code).get({source:'server'});
+        const server = snap.exists ? snap.data() : null;
+        const serverSpecial = server?.special;
+        const serverKind = serverSpecial?.kind || serverSpecial?.type || '';
+        const expectedKind = type;
+
+        if(server?.phase !== 'special' || serverKind !== expectedKind){
+          throw new Error(
+            `TV special sync check failed. Server phase="${server?.phase}", special="${serverKind}", expected "${expectedKind}".`
+          );
+        }
+
+        lastSyncStatus=`SPECIAL SENT · ${String(expectedKind).toUpperCase()}`;
+        lastSyncError='';
+        renderHost();
+      }catch(err){
+        console.error('SPECIAL TV SYNC VERIFY FAILED',err);
+        lastSyncStatus='SYNC ERROR';
+        lastSyncError=err.message || String(err);
+        renderHost();
+        alert(`Special did not reach the TV state: ${lastSyncError}`);
+      }
+    }
   }
 
   async function exitSpecial(){

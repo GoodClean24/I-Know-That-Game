@@ -405,3 +405,14 @@ content-selection and visual-display layer.
 - Reduced special-round question font size only where an image is present.
 - Image and question are forced into separate stacked rows.
 - No Firebase, scoring, question-bank, or gameplay logic changes.
+
+
+## v3.1.1 Special → TV Sync Fix
+- Base restored to v3.1 visuals.
+- No v3.2 home/logo changes included.
+- Entering any Special clears `tvOverride` and any leftover result overlay.
+- After syncing, Host verifies the server has:
+  - `phase === "special"`
+  - the expected Special type/kind.
+- Host shows `SPECIAL SENT · ...` when Firebase confirms it.
+- No scoring, question-bank, visual-layout, or logo changes.
